@@ -1,8 +1,8 @@
 package com.spring.blog.service;
 
-import com.spring.blog.dto.ReplyCreateRequestDTO;
-import com.spring.blog.dto.ReplyResponseDTO;
-import com.spring.blog.dto.ReplyUpdateRequestDTO;
+import com.spring.blog.dto.ReplyInsertDTO;
+import com.spring.blog.dto.ReplyFindByIdDTO;
+import com.spring.blog.dto.ReplyUpdateDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class ReplyServiceTest {
     @DisplayName("2번 글에 연동된 댓글 전체를 가져와서 개수가 4개일 것이라 단언")
     public void findAllByBlogIdTest(){
         long blogId = 2; // given : fixture 저장
-        List<ReplyResponseDTO> replyList = replyService.findAllByBlogId(blogId); // when : 2번글의 댓글 전부 가져오기
+        List<ReplyFindByIdDTO> replyList = replyService.findAllByBlogId(blogId); // when : 2번글의 댓글 전부 가져오기
         //System.out.println(replyList);
         //assertThat(replyList.size()).isEqualTo(4); // then : 댓글의 개수는 4개일 것이다.
         assertEquals(4, replyList.size());
@@ -38,8 +38,9 @@ public class ReplyServiceTest {
     public void findByReplyIdTest(){
         long replyId = 5;
         String replyWriter = "개발고수";
+        long blogId = 3;
 
-        ReplyResponseDTO result = replyService.findByReplyId(replyId);
+        ReplyFindByIdDTO result = replyService.findByReplyId(replyId);
 
         assertEquals(replyId, result.getReplyId());
         assertEquals(replyWriter, result.getReplyWriter());
@@ -65,20 +66,19 @@ public class ReplyServiceTest {
         long blogId = 1;
         String replyWriter = "두두";
         String replyContent = "스프링공부 열심히하세요";
-        ReplyCreateRequestDTO replyCreateRequestDTO = ReplyCreateRequestDTO.builder()
+        ReplyInsertDTO replyInsertDTO = ReplyInsertDTO.builder()
                 .blogId(blogId)
                 .replyWriter(replyWriter)
                 .replyContent(replyContent)
                 .build();
 
-        replyService.save();
+        replyService.save(replyInsertDTO);
 
-        List<ReplyResponseDTO> resultList = replyService.findAllByBlogId(blogId); // 전체 댓글 가져오기
+        List<ReplyFindByIdDTO> resultList = replyService.findAllByBlogId(blogId); // 전체 댓글 가져오기
         assertEquals(1,resultList.size());
 
         // resultList의 개수 - 1 이 마지막 인덱스 번호이므로, resultList에서 마지막 인덱스 요소만 가져오기
-        ReplyResponseDTO result = resultList.get(resultList.size() - 1);
-
+        ReplyFindByIdDTO result = resultList.get(resultList.size() - 1);
         assertEquals(replyWriter, result.getReplyWriter());
         assertEquals(replyContent, result.getReplyContent());
     }
@@ -90,19 +90,19 @@ public class ReplyServiceTest {
         long replyId = 3;
         String replyWriter = "률류";
         String replyContent = "본문 수정합니다";
-//        ReplyUpdateRequestDTO replyUpdateDTO = ReplyUpdateRequestDTO.builder()
+//        ReplyUpdateDTO replyUpdateDTO = ReplyUpdateDTO.builder()
 //                .replyId(replyId)
 //                .replyWriter(replyWriter)
 //                .replyContent(replyContent)
 //                .build();
-        ReplyUpdateRequestDTO replyUpdateRequestDTO = new ReplyUpdateRequestDTO();
-        replyUpdateRequestDTO.setReplyId(replyId);
-        replyUpdateRequestDTO.setReplyWriter(replyWriter);
-        replyUpdateRequestDTO.setReplyContent(replyContent);
+        ReplyUpdateDTO replyUpdateDTO = new ReplyUpdateDTO();
+        replyUpdateDTO.setReplyId(replyId);
+        replyUpdateDTO.setReplyWriter(replyWriter);
+        replyUpdateDTO.setReplyContent(replyContent);
 
-        replyService.update(replyUpdateRequestDTO);
+        replyService.update(replyUpdateDTO);
 
-        ReplyResponseDTO result = replyService.findByReplyId(replyId);
+        ReplyFindByIdDTO result = replyService.findByReplyId(replyId);
         assertEquals(replyWriter, result.getReplyWriter());
         assertEquals(replyContent, result.getReplyContent());
         assertTrue(result.getUpdatedAt().isAfter(result.getPublishedAt()));

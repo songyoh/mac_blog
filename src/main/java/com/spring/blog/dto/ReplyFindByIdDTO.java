@@ -6,7 +6,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 @Getter @Setter @AllArgsConstructor
 @NoArgsConstructor @ToString @Builder
-public class ReplyResponseDTO {
+public class ReplyFindByIdDTO {
 
     private long replyId;
     private String replyWriter;
@@ -16,7 +16,7 @@ public class ReplyResponseDTO {
 
     // DTO는 entity의 객체를 이용해 생성될 수 있어야 하지만
     // 반대는 성립하지 않는다.(Entity는 DTO의 내부 구조를 알 필요가 없다)
-    public ReplyResponseDTO(Reply reply){
+    public ReplyFindByIdDTO(Reply reply){
         this.replyId = reply.getReplyId();
         this.replyWriter = reply.getReplyWriter();
         this.replyContent = reply.getReplyContent();
