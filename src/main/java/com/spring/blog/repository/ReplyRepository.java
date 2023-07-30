@@ -27,4 +27,7 @@ public interface ReplyRepository {
     // 수정로직은 replyId를 WHERE절에 집어넣고, replyWriter,replyContent의 내용을 업데이트 해주고
     // updateAt 역시 NOW()로 바꿔준다
     void update(ReplyUpdateDTO replyUpdateDTO);
+
+    // blogId를 받아서 특정 글과 연결된 댓글 전체를 삭제하는 메서드 정의
+    void deleteByBlogId(long blogId);
 }

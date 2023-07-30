@@ -115,4 +115,19 @@ public class ReplyRepositoryTest {
         assertTrue(result.getUpdatedAt().isAfter(result.getPublishedAt()));
     }
 
+    @Test
+    @Transactional
+    @DisplayName("blogId가 2번인 글을 삭제하면, 삭제한 글의 전체 댓글 조회시 null일 것이다.")
+    public void deleteByBlogId(){
+        // given
+        long blogId = 2;
+
+        // when
+        replyRepository.deleteByBlogId(blogId);
+
+        // then : blogId 2번 글 전체 댓글을 얻어와서 길이가 0인지 확인
+        List<ReplyFindByIdDTO> resultList = replyRepository.findAllByBlogId(blogId);
+        assertEquals(0, resultList.size());
+    }
+
 }

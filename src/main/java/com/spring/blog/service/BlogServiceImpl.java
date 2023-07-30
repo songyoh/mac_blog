@@ -2,6 +2,7 @@ package com.spring.blog.service;
 
 import com.spring.blog.entity.Blog;
 import com.spring.blog.repository.BlogRepository;
+import com.spring.blog.repository.ReplyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +13,12 @@ public class BlogServiceImpl implements BlogService{
 
     BlogRepository blogRepository;
 
+    ReplyRepository replyRepository;
+
     @Autowired
-    public BlogServiceImpl(BlogRepository blogRepository){
+    public BlogServiceImpl(BlogRepository blogRepository, ReplyRepository replyRepository){
         this.blogRepository = blogRepository;
+        this.replyRepository = replyRepository;
     }
 
     @Override
