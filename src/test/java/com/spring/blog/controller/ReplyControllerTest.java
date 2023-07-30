@@ -1,10 +1,9 @@
 package com.spring.blog.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spring.blog.dto.ReplyFindByIdDTO;
-import com.spring.blog.dto.ReplyInsertDTO;
+import com.spring.blog.dto.ReplyCreateRequestDTO;
+import com.spring.blog.dto.ReplyResponseDTO;
 import com.spring.blog.repository.ReplyRepository;
-import com.spring.blog.service.ReplyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,14 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
@@ -98,16 +93,16 @@ class ReplyControllerTest {
     @Transactional
     @DisplayName("blogId 1번의 replyWriter는 '주주' replyContent는 '안뇽'을 등록 후 전체댓글 조회시 일치")
     public void insertReplyTest() throws Exception{
-        //given : 픽스쳐 생성 및 ReplyInsertDTO 객체 생성 후 픽스처 주입 + json으로 데이터 직렬화
+        //given : 픽스쳐 생성 및 ReplyCreateRequestDTO 객체 생성 후 픽스처 주입 + json으로 데이터 직렬화
         long blogId = 1;
         String replyWriter = "주주";
         String replyContent = "안뇽";
-        ReplyInsertDTO replyInsertDTO = new ReplyInsertDTO(blogId, replyWriter, replyContent);
+        ReplyCreateRequestDTO replyCreateRequestDTO = new ReplyCreateRequestDTO(blogId, replyWriter, replyContent);
         String url = "/reply";
         String url2 = "/reply/1/all";
 
         // 데이터 직렬화
-        final String requestBody = objectMapper.writeValueAsString(replyInsertDTO);
+        final String requestBody = objectMapper.writeValueAsString(replyCreateRequestDTO);
 
         // when : 직렬화된 데이터를 이용해 POST방식으로
         mockMvc.perform(post(url).contentType(MediaType.APPLICATION_JSON)
@@ -136,9 +131,9 @@ class ReplyControllerTest {
                                     // 리턴데이터가 있는경우에 해당 데이터를 어떤 형식으로 받아올지 기술
 
         // then : repository를 이용해 전테 데이터를 가져온 후, 개수 비교 및 삭제한 3번 댓글은 NULL이 리턴되는지 확인
-        List<ReplyFindByIdDTO> resultList = replyRepository.findAllByBlogId(blogId);
+        List<ReplyResponseDTO> resultList = replyRepository.findAllByBlogId(blogId);
         assertEquals(3, resultList.size());
-        ReplyFindByIdDTO result = replyRepository.findByReplyId(replyId);
+        ReplyResponseDTO result = replyRepository.findByReplyId(replyId);
         assertNull(result);
     }
 

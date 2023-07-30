@@ -136,3 +136,11 @@ junit.jupiter.execution.parallel.config.dynamic.factor=1
 * config.dynamic.factor : dynamic 전략 채택시 곱할 인자 수(1은 cpu의 코어 숫자만큼 채택)
 
 위 파일을 생성하고 설정을 위와같이 하고 테스트 코드를 돌리면 동시에 돌아가는것을 볼 수 있습니다.
+
+---
+
+## 프로젝트 중간 리팩토링(23.06.23)
+
+* ReplyFindByIdDTO -> ReplyResponseDTO
+* ReplyInsertDTO -> ReplyCreateRequestDTO
+* ReplyUpdateDTO -> ReplyUpdateRequestDTO
