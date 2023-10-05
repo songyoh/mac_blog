@@ -2,6 +2,7 @@ package com.spring.blog.controller;
 
 import com.spring.blog.dto.ReplyCreateRequestDTO;
 import com.spring.blog.dto.ReplyResponseDTO;
+import com.spring.blog.dto.ReplyUpdateRequestDTO;
 import com.spring.blog.exception.NotFoundReplyByReplyIdException;
 import com.spring.blog.service.ReplyService;
 import org.springframework.http.HttpStatus;
@@ -66,6 +67,20 @@ public class ReplyController {
 
         return ResponseEntity.ok("댓글이 삭제되었습니다.");
     }
+
+    // 수정로직은 put, patch메서드로 /reply/{댓글번호}/ 주소로
+    // ReplyUpdateRequestDTO를 requestBody로 받아 요청처리를 하게 만들기
+    @RequestMapping(value = "/{replyId}", method = {RequestMethod.PUT, RequestMethod.PATCH})
+    public ResponseEntity<String> updateReply(@PathVariable long replyId,
+                                              @RequestBody ReplyUpdateRequestDTO replyUpdateRequestDTO) {
+        System.out.println("replyId 주입전: "+ replyUpdateRequestDTO);
+        replyUpdateRequestDTO.setReplyId(replyId);
+        System.out.println("replyId 주입후: " + replyUpdateRequestDTO);
+        replyService.update(replyUpdateRequestDTO);
+        return ResponseEntity.ok("댓글이 수정되었습니다.");
+    }
+
+
 
 
 }
